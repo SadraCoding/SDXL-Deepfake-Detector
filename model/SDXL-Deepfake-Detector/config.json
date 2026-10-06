@@ -1,0 +1,21 @@
+{
+  "architectures": [
+    "SwinFrequencyHybridDetector"
+  ],
+  "base_model_name": "Organika/sdxl-detector",
+  "confidence_threshold": 0.9,
+  "dtype": "float32",
+  "early_exit_loss_weight": 0.25,
+  "id2label": {
+    "0": "artificial",
+    "1": "human"
+  },
+  "label2id": {
+    "artificial": 0,
+    "human": 1
+  },
+  "model_type": "swin-frequency-hybrid",
+  "num_classes": 2,
+  "transformers_version": "5.18.0",
+  "use_cache": false
+}
