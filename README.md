@@ -2,7 +2,11 @@
 
 ![Research banner](media/border.png)
 
-**Live demo:** [sdxldd.ir](https://sdxldd.ir)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-sdxldd.ir-2563eb?style=for-the-badge)](https://sdxldd.ir)
+[![Hugging Face Model](https://img.shields.io/badge/Hugging%20Face-Model-yellow?style=for-the-badge&logo=huggingface)](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector)
+[![Dataset](https://img.shields.io/badge/Kaggle-Dataset-20beff?style=for-the-badge&logo=kaggle)](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces)
+[![Research Report](https://img.shields.io/badge/Read-Research%20Report-475569?style=for-the-badge)](REVISED_PROJECT_REPORT.md)
+[![Research Protocol](https://img.shields.io/badge/Read-Research%20Protocol-475569?style=for-the-badge)](docs/research_protocol.md)
 
 **A research implementation for binary classification of face images as `human` or `artificial`.** The project fine-tunes the Swin image-classification model [`Organika/sdxl-detector`](https://huggingface.co/Organika/sdxl-detector), combines its spatial representation with a learned representation of the input image's centered two-dimensional Fourier log-magnitude, and includes an optional confidence-based early-exit path.
 
@@ -18,9 +22,18 @@
 | Fusion | Concatenated spatial and frequency embeddings; batch normalization, ReLU, dropout, and classification layer |
 | Optional inference mode | Auxiliary Swin-feature classifier with a configurable confidence threshold |
 | Dataset cited by the project | [xhlulu/140k-real-and-fake-faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces), downloaded separately |
+| Published model page | [SadraCoding/SDXL-Deepfake-Detector on Hugging Face](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector) |
+| Training hardware | One NVIDIA RTX 3060 with 12 GB VRAM |
 | Included result artifact | [`model/results/metrics.json`](model/results/metrics.json), one run with incomplete provenance |
 
 The research question is whether an explicit frequency representation adds useful evidence beyond spatial features for this dataset and evaluation protocol. The repository does not establish that it does: a controlled Swin-only baseline, documented split provenance, repeated runs, and external-generator tests are needed. See the [research report](REVISED_PROJECT_REPORT.md) and [protocol](docs/research_protocol.md).
+
+### Start here
+
+- **Try the detector:** [Open the live demo](https://sdxldd.ir).
+- **Download or inspect the checkpoint:** [Hugging Face model repository](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector).
+- **Reproduce the study:** follow the [training](#training) and [evaluation](#evaluation) instructions.
+- **Read the research details:** see the [technical report](REVISED_PROJECT_REPORT.md) and [research protocol](docs/research_protocol.md).
 
 ## Repository map
 
@@ -152,6 +165,8 @@ The default threshold in evaluation is read from the checkpoint; `--confidence_t
 ## Recorded result snapshot
 
 The table below summarizes the checked-in [`metrics.json`](model/results/metrics.json). It records 10,905 images, `device: cuda`, and a test directory string of `dataset/test`. **The artifact does not record the dataset version, split construction, class-folder support breakdown by source, GPU model, software versions, checkpoint hash, or threshold-selection procedure.** Consequently, these figures are a historical run record, not a reproducible benchmark or a generalization claim.
+
+The [Hugging Face model page](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector) currently displays a self-reported 97% accuracy. The checked-in metrics artifact reports 93.27% clean accuracy. Their evaluation details are not documented in a way that establishes an apples-to-apples comparison, so treat them as separate reported results and do not combine them.
 
 | Corruption | Accuracy (full / adaptive) | Weighted precision | Weighted recall | Weighted F1 | Latency (full / adaptive, ms/image) | Adaptive early-exit rate | Speedup |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |

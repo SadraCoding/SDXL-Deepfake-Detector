@@ -14,6 +14,10 @@
 
 **Code license:** MIT; model and dataset rights are separate
 
+**Training hardware reported for this model:** One NVIDIA RTX 3060 with 12 GB VRAM
+
+**Quick links:** [Project README](README.md) · [Live demo](https://sdxldd.ir) · [Hugging Face model](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector)
+
 ## Abstract
 
 This project implements a two-branch image classifier that combines a pretrained Swin Transformer representation with learned features from a centered two-dimensional Fourier log-magnitude spectrum. An auxiliary classifier supports optional confidence-based early exit. The training and evaluation scripts provide a reproducible entry-point structure, class-folder inputs, chunked preprocessing, synthetic corruption measurements, and machine-readable metrics.
@@ -100,6 +104,8 @@ The training entry point is `model/scripts/train.py`. Its configured defaults ar
 | Save/evaluate strategy | Each epoch; retain up to two Trainer checkpoints |
 | FP16 | Enabled when CUDA is available |
 
+The model was trained on one NVIDIA RTX 3060 with 12 GB VRAM. The checked-in metrics JSON records the evaluation device only as `cuda`, so it does not independently identify the hardware used for its timing measurements.
+
 The script clears and recreates `./temp_chunks/`, preprocesses training and validation data in chunks, loads the processed datasets, then removes the temporary cache. It sets Python, NumPy, and PyTorch seeds, including CUDA seeds when available. Deterministic kernels are not explicitly enabled; results need not be bitwise identical across hardware or library versions. The model is saved to `./SDXL-Deepfake-Detector` relative to the working directory.
 
 Training command, run from `model/`:
@@ -135,6 +141,8 @@ For clean images, the evaluator also aggregates native resolution, Laplacian-var
 ## 7. Results currently recorded in the repository
 
 [`model/results/metrics.json`](model/results/metrics.json) records one run over 10,905 images. Its metadata gives `test_dir: dataset/test` and `device: cuda`, but it does not identify the dataset release, how the split was formed, the checkpoint hash, GPU model, software versions, threshold-selection procedure, or uncertainty estimates. Therefore these results are reported for transparency, not as a reproducible benchmark or broad performance claim.
+
+The [Hugging Face model page](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector) currently shows a self-reported 97% accuracy. The local metrics snapshot reports 93.27% clean accuracy. The available metadata does not establish that the two values use the same checkpoint, split, or evaluation protocol, so cite them separately rather than comparing them directly.
 
 | Condition | Accuracy (full / adaptive) | Weighted precision | Weighted recall | Weighted F1 | Latency (full / adaptive, ms/image) | Adaptive exit rate | Speedup |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -191,5 +199,6 @@ The companion [`docs/research_protocol.md`](docs/research_protocol.md) expands t
 1. Liu, Z. et al. (2021). “Swin Transformer: Hierarchical Vision Transformer using Shifted Windows.” *Proceedings of ICCV*. [https://doi.org/10.1109/ICCV48922.2021.00986](https://doi.org/10.1109/ICCV48922.2021.00986).
 2. Frank, J. et al. (2020). “Leveraging Frequency Analysis for Deep Fake Image Recognition.” [https://arxiv.org/abs/2003.08685](https://arxiv.org/abs/2003.08685).
 3. Byun, J. Y. et al. (2026). “Adaptive Inference for Medical Vision Transformers: Token Reduction or Early Exit?” *Proceedings of the 9th International Conference on Medical Imaging with Deep Learning*, PMLR 315:2171–2191. [https://proceedings.mlr.press/v315/byun26b.html](https://proceedings.mlr.press/v315/byun26b.html).
-4. Organika. “SDXL Detector.” Hugging Face model card. [https://huggingface.co/Organika/sdxl-detector](https://huggingface.co/Organika/sdxl-detector).
-5. xhlulu. “140k Real and Fake Faces.” Kaggle dataset. [https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces).
+4. SadraCoding. “SDXL-Deepfake-Detector.” Hugging Face model repository. [https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector).
+5. Organika. “SDXL Detector.” Hugging Face model card. [https://huggingface.co/Organika/sdxl-detector](https://huggingface.co/Organika/sdxl-detector).
+6. xhlulu. “140k Real and Fake Faces.” Kaggle dataset. [https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces).

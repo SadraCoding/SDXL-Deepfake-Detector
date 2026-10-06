@@ -2,6 +2,8 @@
 
 This protocol is intended for university projects, theses, and papers using this repository. It separates the implemented software behavior from the evidence a defensible study should collect. A completed checklist does not itself establish validity; study design and data provenance determine what can be concluded.
 
+**Quick links:** [Project README](../README.md) · [Research report](../REVISED_PROJECT_REPORT.md) · [Live demo](https://sdxldd.ir) · [Hugging Face model](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector)
+
 ## 1. Define the claim before running experiments
 
 Write the research question and primary endpoint before examining test results. A suitable question for this codebase is:
@@ -100,6 +102,8 @@ Apply each corruption to the same held-out images when paired comparisons are in
 
 Choose the confidence threshold using validation data only. On test data, report the frozen threshold, full-path and adaptive metrics, early-exit coverage/rate, and latency together. Include calibration diagnostics (for example, reliability plots or expected calibration error with stated binning) if confidence is interpreted probabilistically. A high softmax score alone does not demonstrate correct or calibrated prediction.
 
+Recent adaptive-inference research for medical vision transformers combines token reduction and early exit using dataset-specific profiling and a learned strategy selector ([Byun et al., 2026](https://proceedings.mlr.press/v315/byun26b.html)). This repository implements confidence-threshold early exit only. Treat the paper as methodological context: its medical-dataset results and FLOPs reductions are not directly comparable to this project's face-image results or latency measurements.
+
 Recent adaptive-inference research for medical vision transformers combines token reduction and early exit using dataset-specific profiling and a learned strategy selector ([Byun et al., 2026](https://proceedings.mlr.press/v315/byun26b.html)). The implementation in this repository uses confidence-threshold early exit only. Treat the paper as methodological context: its medical-dataset results and FLOPs reductions are not directly comparable to this project's face-image results or latency measurements.
 
 The evaluator measures the model-call interval after processor execution and reports mean milliseconds per image for a batch. State hardware, batch size, warm-up policy, number of repetitions, synchronization policy, timing scope, and whether the statistic is mean, median, or a distribution. Report throughput separately if measured. Early-exit rate is not a FLOPs measurement.
@@ -168,7 +172,7 @@ Store machine-readable metadata with every evaluation. The following is a templa
 }
 ```
 
-The current `model/results/metrics.json` does not contain all of this metadata. Treat it as an incomplete historical record and do not infer missing provenance from filenames or README prose.
+The model was trained on one NVIDIA RTX 3060 with 12 GB VRAM. The current `model/results/metrics.json` does not record the GPU model for its evaluation timing, nor does it contain all of the metadata above. Treat it as an incomplete historical record and do not infer missing evaluation provenance from filenames or README prose. The Hugging Face model page also displays a self-reported 97% accuracy; do not compare that figure with the local metrics snapshot (93.27% clean accuracy) without evidence that their checkpoints, data splits, and protocols match.
 
 ## 8. Reporting and interpretation
 
@@ -179,6 +183,7 @@ For face data, follow institutional policies and applicable privacy/data-protect
 ## References and project materials
 
 - Project implementation and current results: [`README.md`](../README.md), [`model/scripts/`](../model/scripts/), and [`model/results/metrics.json`](../model/results/metrics.json).
+- Fine-tuned model repository: [SadraCoding/SDXL-Deepfake-Detector](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector).
 - Base model card: [Organika/sdxl-detector](https://huggingface.co/Organika/sdxl-detector).
 - Dataset source: [xhlulu/140k-real-and-fake-faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces).
 - Swin Transformer: Liu, Z. et al. (2021), [DOI: 10.1109/ICCV48922.2021.00986](https://doi.org/10.1109/ICCV48922.2021.00986).
