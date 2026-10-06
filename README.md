@@ -1,6 +1,8 @@
 # Spatial–Frequency Hybrid Detector for Synthetic Face Images
 
-![Research banner](media/border.svg)
+![Research banner](media/border.png)
+
+**Live demo:** [sdxldd.ir](https://sdxldd.ir)
 
 **A research implementation for binary classification of face images as `human` or `artificial`.** The project fine-tunes the Swin image-classification model [`Organika/sdxl-detector`](https://huggingface.co/Organika/sdxl-detector), combines its spatial representation with a learned representation of the input image's centered two-dimensional Fourier log-magnitude, and includes an optional confidence-based early-exit path.
 
