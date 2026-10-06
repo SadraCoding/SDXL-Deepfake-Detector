@@ -100,6 +100,8 @@ Apply each corruption to the same held-out images when paired comparisons are in
 
 Choose the confidence threshold using validation data only. On test data, report the frozen threshold, full-path and adaptive metrics, early-exit coverage/rate, and latency together. Include calibration diagnostics (for example, reliability plots or expected calibration error with stated binning) if confidence is interpreted probabilistically. A high softmax score alone does not demonstrate correct or calibrated prediction.
 
+Recent adaptive-inference research for medical vision transformers combines token reduction and early exit using dataset-specific profiling and a learned strategy selector ([Byun et al., 2026](https://proceedings.mlr.press/v315/byun26b.html)). The implementation in this repository uses confidence-threshold early exit only. Treat the paper as methodological context: its medical-dataset results and FLOPs reductions are not directly comparable to this project's face-image results or latency measurements.
+
 The evaluator measures the model-call interval after processor execution and reports mean milliseconds per image for a batch. State hardware, batch size, warm-up policy, number of repetitions, synchronization policy, timing scope, and whether the statistic is mean, median, or a distribution. Report throughput separately if measured. Early-exit rate is not a FLOPs measurement.
 
 ## 6. Statistical analysis and ablation
@@ -181,3 +183,4 @@ For face data, follow institutional policies and applicable privacy/data-protect
 - Dataset source: [xhlulu/140k-real-and-fake-faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces).
 - Swin Transformer: Liu, Z. et al. (2021), [DOI: 10.1109/ICCV48922.2021.00986](https://doi.org/10.1109/ICCV48922.2021.00986).
 - Frequency analysis for generated-image recognition: Frank, J. et al. (2020), [arXiv:2003.08685](https://arxiv.org/abs/2003.08685).
+- Adaptive inference for medical vision transformers: Byun, J. Y. et al. (2026), *PMLR* 315:2171–2191, [proceedings page](https://proceedings.mlr.press/v315/byun26b.html).

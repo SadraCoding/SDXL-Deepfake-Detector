@@ -40,6 +40,8 @@ Swin Transformer uses hierarchical visual representations with shifted-window at
 
 Frequency-domain evidence has been studied for generated-image analysis. For example, Frank et al. investigate frequency analysis for deep-fake image recognition ([2020](https://arxiv.org/abs/2003.08685)). This literature motivates an experimental frequency branch; it does not imply that a Fourier branch will be robust to new generators, compression, resampling, or data-source shifts. The benefit must be measured through ablations and external testing.
 
+Adaptive inference has also been studied for medical vision transformers. Byun et al. (2026) combine token reduction and early exiting, using dataset-specific profiling and a lightweight predictor to select strategies. They report results across five medical datasets, including an INSIGHT cataract dataset. This is related work on sample-adaptive computation, but its medical-image results do not transfer directly to this face-image classifier. The current project implements a confidence-threshold early exit only; it has neither token reduction nor the paper's strategy-selection predictor.
+
 ## 3. Model specification
 
 ### 3.1 Spatial representation
@@ -188,5 +190,6 @@ The companion [`docs/research_protocol.md`](docs/research_protocol.md) expands t
 
 1. Liu, Z. et al. (2021). “Swin Transformer: Hierarchical Vision Transformer using Shifted Windows.” *Proceedings of ICCV*. [https://doi.org/10.1109/ICCV48922.2021.00986](https://doi.org/10.1109/ICCV48922.2021.00986).
 2. Frank, J. et al. (2020). “Leveraging Frequency Analysis for Deep Fake Image Recognition.” [https://arxiv.org/abs/2003.08685](https://arxiv.org/abs/2003.08685).
-3. Organika. “SDXL Detector.” Hugging Face model card. [https://huggingface.co/Organika/sdxl-detector](https://huggingface.co/Organika/sdxl-detector).
-4. xhlulu. “140k Real and Fake Faces.” Kaggle dataset. [https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces).
+3. Byun, J. Y. et al. (2026). “Adaptive Inference for Medical Vision Transformers: Token Reduction or Early Exit?” *Proceedings of the 9th International Conference on Medical Imaging with Deep Learning*, PMLR 315:2171–2191. [https://proceedings.mlr.press/v315/byun26b.html](https://proceedings.mlr.press/v315/byun26b.html).
+4. Organika. “SDXL Detector.” Hugging Face model card. [https://huggingface.co/Organika/sdxl-detector](https://huggingface.co/Organika/sdxl-detector).
+5. xhlulu. “140k Real and Fake Faces.” Kaggle dataset. [https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces).
