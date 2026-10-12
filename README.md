@@ -164,19 +164,29 @@ The default threshold in evaluation is read from the checkpoint; `--confidence_t
 
 ## Recorded result snapshot
 
-The table below summarizes the checked-in [`metrics.json`](model/results/metrics.json). It records 10,905 images, `device: cuda`, and a test directory string of `dataset/test`. **The artifact does not record the dataset version, split construction, class-folder support breakdown by source, GPU model, software versions, checkpoint hash, or threshold-selection procedure.** Consequently, these figures are a historical run record, not a reproducible benchmark or a generalization claim.
+The tables below reproduce the metrics recorded in [`metrics.json`](model/results/metrics.json). The artifact records 10,905 images, `device: cuda`, and test directory `dataset/test`; class supports are 5,492 `artificial` (ID 0) and 5,413 `human` (ID 1). Percentages are rounded to two decimals. The per-class and aggregate classification metrics are identical for full and adaptive inference in this artifact, so they appear once per variant; the full and adaptive confusion matrices are also identical.
 
-The [Hugging Face model page](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector) currently displays a self-reported 97% accuracy. The checked-in metrics artifact reports 93.27% clean accuracy. Their evaluation details are not documented in a way that establishes an apples-to-apples comparison, so treat them as separate reported results and do not combine them.
+The [Hugging Face model page](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector) has displayed a self-reported 97% accuracy. The checked-in metrics artifact reports 93.27% clean accuracy. Their evaluation details are not documented in a way that establishes an apples-to-apples comparison, so treat them as separate reported results and do not combine them.
 
-| Corruption | Accuracy (full / adaptive) | Weighted precision | Weighted recall | Weighted F1 | Latency (full / adaptive, ms/image) | Adaptive early-exit rate | Speedup |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Clean | 93.27% / 93.27% | 93.58% | 93.27% | 93.26% | 6.60 / 6.24 | 99.06% | 1.058× |
-| JPEG q=50 | 91.30% / 91.30% | 92.07% | 91.30% | 91.25% | 6.63 / 6.27 | 98.73% | 1.058× |
-| Gaussian blur 5 × 5 | 92.86% / 92.86% | 92.89% | 92.86% | 92.85% | 6.66 / 6.30 | 98.56% | 1.057× |
-| Half resolution, upscaled | 92.11% / 92.11% | 92.14% | 92.11% | 92.11% | 6.65 / 6.28 | 98.59% | 1.057× |
-| Gaussian noise, σ=15 | 91.24% / 91.24% | 91.44% | 91.24% | 91.23% | 6.59 / 6.22 | 98.42% | 1.060× |
+| Variant | Accuracy | Weighted P / R / F1 | Macro P / R / F1 | Artificial P / R / F1 | Human P / R / F1 | Confusion matrix (true rows, predicted columns; IDs 0, 1) |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Clean | 93.27% | 93.58 / 93.27 / 93.26% | 93.60 / 93.24 / 93.25% | 89.97 / 97.51 / 93.59% | 97.23 / 88.97 / 92.92% | `[[5355, 137], [597, 4816]]` |
+| JPEG quality 50 | 91.30% | 92.07 / 91.30 / 91.25% | 92.11 / 91.25 / 91.25% | 86.44 / 98.11 / 91.91% | 97.77 / 84.39 / 90.59% | `[[5388, 104], [845, 4568]]` |
+| Gaussian blur 5 × 5 | 92.86% | 92.89 / 92.86 / 92.85% | 92.89 / 92.85 / 92.85% | 91.80 / 94.23 / 93.00% | 93.98 / 91.46 / 92.71% | `[[5175, 317], [462, 4951]]` |
+| Half resolution, upscaled | 92.11% | 92.14 / 92.11 / 92.11% | 92.14 / 92.10 / 92.11% | 91.21 / 93.34 / 92.26% | 93.07 / 90.87 / 91.96% | `[[5126, 366], [494, 4919]]` |
+| Gaussian noise, σ = 15 | 91.24% | 91.44 / 91.24 / 91.23% | 91.46 / 91.22 / 91.23% | 88.64 / 94.76 / 91.60% | 94.28 / 87.68 / 90.86% | `[[5204, 288], [667, 4746]]` |
 
-In this artifact, adaptive and full modes report the same predicted labels for every listed variant; adaptive latency is approximately 5.5–5.8% lower. The recorded threshold is not explicitly stored in the metrics file, and no uncertainty intervals or repeated-run estimates are provided. See the raw JSON for weighted metrics, confusion matrices, class reports, and image-quality summaries. Do not compare these values with published results unless the dataset, split, preprocessing, and metric definitions match.
+| Variant | Full latency (ms/image) | Adaptive latency (ms/image) | Early-exit rate (full / adaptive) | Speedup (full / adaptive) |
+| --- | ---: | ---: | ---: | ---: |
+| Clean | 6.60 | 6.24 | 0.00% / 99.06% | 1.058× |
+| JPEG quality 50 | 6.63 | 6.27 | 0.00% / 98.73% | 1.058× |
+| Gaussian blur 5 × 5 | 6.66 | 6.30 | 0.00% / 98.56% | 1.057× |
+| Half resolution, upscaled | 6.65 | 6.28 | 0.00% / 98.59% | 1.057× |
+| Gaussian noise, σ = 15 | 6.59 | 6.22 | 0.00% / 98.42% | 1.060× |
+
+The clean-image quality measurements in the artifact are mean blur score **628.65**, mean noise score **6.07**, and mean JPEG-50 MAE **3.57**. These diagnostics are reported for clean images only; the JSON does not contain these fields for the corrupted variants. They are descriptive image measurements, not learned quality or authenticity scores.
+
+The evaluator's corruption procedures are described in [Evaluation](#evaluation). These are controlled synthetic degradations, not a comprehensive robustness assessment. The recorded threshold is not explicitly stored in the metrics file, and no uncertainty intervals or repeated-run estimates are provided. These figures are a historical run record, not a reproducible benchmark or a generalization claim: the artifact omits dataset version, split construction, per-source support, GPU model, software versions, checkpoint hash, and threshold-selection procedure. Do not compare these values with published results unless dataset, split, preprocessing, and metric definitions match.
 
 ## Limitations and research recommendations
 

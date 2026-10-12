@@ -104,8 +104,6 @@ Choose the confidence threshold using validation data only. On test data, report
 
 Recent adaptive-inference research for medical vision transformers combines token reduction and early exit using dataset-specific profiling and a learned strategy selector ([Byun et al., 2026](https://proceedings.mlr.press/v315/byun26b.html)). This repository implements confidence-threshold early exit only. Treat the paper as methodological context: its medical-dataset results and FLOPs reductions are not directly comparable to this project's face-image results or latency measurements.
 
-Recent adaptive-inference research for medical vision transformers combines token reduction and early exit using dataset-specific profiling and a learned strategy selector ([Byun et al., 2026](https://proceedings.mlr.press/v315/byun26b.html)). The implementation in this repository uses confidence-threshold early exit only. Treat the paper as methodological context: its medical-dataset results and FLOPs reductions are not directly comparable to this project's face-image results or latency measurements.
-
 The evaluator measures the model-call interval after processor execution and reports mean milliseconds per image for a batch. State hardware, batch size, warm-up policy, number of repetitions, synchronization policy, timing scope, and whether the statistic is mean, median, or a distribution. Report throughput separately if measured. Early-exit rate is not a FLOPs measurement.
 
 ## 6. Statistical analysis and ablation
@@ -172,7 +170,7 @@ Store machine-readable metadata with every evaluation. The following is a templa
 }
 ```
 
-The model was trained on one NVIDIA RTX 3060 with 12 GB VRAM. The current `model/results/metrics.json` does not record the GPU model for its evaluation timing, nor does it contain all of the metadata above. Treat it as an incomplete historical record and do not infer missing evaluation provenance from filenames or README prose. The Hugging Face model page also displays a self-reported 97% accuracy; do not compare that figure with the local metrics snapshot (93.27% clean accuracy) without evidence that their checkpoints, data splits, and protocols match.
+The model was trained on one NVIDIA RTX 3060 with 12 GB VRAM. The current `model/results/metrics.json` does not record the GPU model for its evaluation timing, nor does it contain all of the metadata above. Treat it as an incomplete historical record and do not infer missing evaluation provenance from filenames or README prose. The Hugging Face model page has displayed a self-reported 97% accuracy; do not compare that figure with the local metrics snapshot (93.27% clean accuracy) without evidence that their checkpoints, data splits, and protocols match.
 
 ## 8. Reporting and interpretation
 

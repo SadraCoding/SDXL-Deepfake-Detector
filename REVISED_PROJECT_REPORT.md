@@ -140,19 +140,29 @@ For clean images, the evaluator also aggregates native resolution, Laplacian-var
 
 ## 7. Results currently recorded in the repository
 
-[`model/results/metrics.json`](model/results/metrics.json) records one run over 10,905 images. Its metadata gives `test_dir: dataset/test` and `device: cuda`, but it does not identify the dataset release, how the split was formed, the checkpoint hash, GPU model, software versions, threshold-selection procedure, or uncertainty estimates. Therefore these results are reported for transparency, not as a reproducible benchmark or broad performance claim.
+[`model/results/metrics.json`](model/results/metrics.json) records one run over 10,905 images. Its metadata gives `test_dir: dataset/test` and `device: cuda`; class supports are 5,492 `artificial` (ID 0) and 5,413 `human` (ID 1). It does not identify the dataset release, how the split was formed, the checkpoint hash, GPU model, software versions, threshold-selection procedure, or uncertainty estimates. Therefore these results are reported for transparency, not as a reproducible benchmark or broad performance claim. The full metrics are shown below; the [project README](README.md#recorded-result-snapshot) includes the same tables.
 
-The [Hugging Face model page](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector) currently shows a self-reported 97% accuracy. The local metrics snapshot reports 93.27% clean accuracy. The available metadata does not establish that the two values use the same checkpoint, split, or evaluation protocol, so cite them separately rather than comparing them directly.
+The [Hugging Face model page](https://huggingface.co/SadraCoding/SDXL-Deepfake-Detector) has also displayed a self-reported 97% accuracy. The local metrics snapshot reports 93.27% clean accuracy. Available metadata does not establish that the two values use the same checkpoint, split, or evaluation protocol, so cite them separately rather than comparing them directly. Percentages below are rounded to two decimals. Full and adaptive inference have identical aggregate and per-class classification metrics and confusion matrices for each variant in this run.
 
-| Condition | Accuracy (full / adaptive) | Weighted precision | Weighted recall | Weighted F1 | Latency (full / adaptive, ms/image) | Adaptive exit rate | Speedup |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Clean | 93.27% / 93.27% | 93.58% | 93.27% | 93.26% | 6.60 / 6.24 | 99.06% | 1.058× |
-| JPEG q=50 | 91.30% / 91.30% | 92.07% | 91.30% | 91.25% | 6.63 / 6.27 | 98.73% | 1.058× |
-| Gaussian blur 5 × 5 | 92.86% / 92.86% | 92.89% | 92.86% | 92.85% | 6.66 / 6.30 | 98.56% | 1.057× |
-| Half resolution, then upscale | 92.11% / 92.11% | 92.14% | 92.11% | 92.11% | 6.65 / 6.28 | 98.59% | 1.057× |
-| Gaussian noise, σ=15 | 91.24% / 91.24% | 91.44% | 91.24% | 91.23% | 6.59 / 6.22 | 98.42% | 1.060× |
+| Variant | Accuracy | Weighted P / R / F1 | Macro P / R / F1 | Artificial P / R / F1 | Human P / R / F1 | Confusion matrix (true rows, predicted columns; IDs 0, 1) |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Clean | 93.27% | 93.58 / 93.27 / 93.26% | 93.60 / 93.24 / 93.25% | 89.97 / 97.51 / 93.59% | 97.23 / 88.97 / 92.92% | `[[5355, 137], [597, 4816]]` |
+| JPEG quality 50 | 91.30% | 92.07 / 91.30 / 91.25% | 92.11 / 91.25 / 91.25% | 86.44 / 98.11 / 91.91% | 97.77 / 84.39 / 90.59% | `[[5388, 104], [845, 4568]]` |
+| Gaussian blur 5 × 5 | 92.86% | 92.89 / 92.86 / 92.85% | 92.89 / 92.85 / 92.85% | 91.80 / 94.23 / 93.00% | 93.98 / 91.46 / 92.71% | `[[5175, 317], [462, 4951]]` |
+| Half resolution, upscaled | 92.11% | 92.14 / 92.11 / 92.11% | 92.14 / 92.10 / 92.11% | 91.21 / 93.34 / 92.26% | 93.07 / 90.87 / 91.96% | `[[5126, 366], [494, 4919]]` |
+| Gaussian noise, σ = 15 | 91.24% | 91.44 / 91.24 / 91.23% | 91.46 / 91.22 / 91.23% | 88.64 / 94.76 / 91.60% | 94.28 / 87.68 / 90.86% | `[[5204, 288], [667, 4746]]` |
 
-Values are transcribed from the metrics artifact; accuracy and latency do not capture uncertainty or independent generalization. The adaptive and full paths have the same reported aggregate classification metrics for the listed variants in this run. Adaptive latency is about 5.5–5.8% lower under the recorded environment, while the metric file does not identify that environment in sufficient detail to reproduce the timing. The clean confusion matrix is `[[5355, 137], [597, 4816]]` in label-ID order `[artificial, human]`.
+P / R / F1 means precision / recall / F1. Confusion matrices use true-label rows and predicted-label columns ordered `artificial`, `human`.
+
+| Variant | Full latency (ms/image) | Adaptive latency (ms/image) | Early-exit rate (full / adaptive) | Speedup (full / adaptive) |
+| --- | ---: | ---: | ---: | ---: |
+| Clean | 6.60 | 6.24 | 0.00% / 99.06% | 1.058× |
+| JPEG quality 50 | 6.63 | 6.27 | 0.00% / 98.73% | 1.058× |
+| Gaussian blur 5 × 5 | 6.66 | 6.30 | 0.00% / 98.56% | 1.057× |
+| Half resolution, upscaled | 6.65 | 6.28 | 0.00% / 98.59% | 1.057× |
+| Gaussian noise, σ = 15 | 6.59 | 6.22 | 0.00% / 98.42% | 1.060× |
+
+For clean images, mean blur score is 628.65, mean noise score is 6.07, and mean JPEG-50 MAE is 3.57. These descriptive diagnostics are not learned quality or authenticity scores and are absent for corrupted variants. The adaptive and full predictions are identical in this artifact; measured adaptive latency is approximately 5.5–5.8% lower. Latency is batch- and hardware-dependent, and the JSON does not identify the GPU model, timing repetitions, or warm-up policy. These measurements do not establish generalization or a hardware-independent real-time result.
 
 ## 8. Review feedback and contribution boundaries
 
